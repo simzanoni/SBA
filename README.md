@@ -23,4 +23,14 @@ To minimise erroneous streamline sampling in subject space, SBA offers a back-tr
 ```bash
 tckbacktrack tracks_filtered_template_subjectspace.tck FOD_subject.mif.gz 5tt_subjectspace.mif.gz tracks_filtered_template_subjectspace_refined.tck 
 ```
+<p align="center">
+  <img src="figures/tracks_refinement_github.jpg" width="70%">
+</p>
+
+<p align="center">
+  <em>
+    Qualitative comparison between template streamlines projected to subject space (“raw”) and their “refined” back-tracking/re-tracking version in four magnified regions from a slice of a representative subject. Streamlines are overlaid on tissue segmentation to provide high anatomical contrast (Cerebro Spinal Fluid – CSF; cortical Gray Matter – cGM; White Matter - WM). The refinement effect of this procedure can be observed in the improvements of regions with lack of WM coverage, and elimination of spurious cGM and CSF incursions.
+  </em>
+</p>
+
 
