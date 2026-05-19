@@ -53,9 +53,14 @@ SBA can flexibly accommodate various metrics, depending on the research question
 ```bash
 fixel2tsf FD.mif tracks_filtered_template_subjectspace_refined.tck FD_samples.tsf
 tsfinfo FD_samples.tsf -ascii_combined FD_samples_combined.txt
+# Python script available in SBA/aux_files/
 python mean_fixelsamples.py FD_samples_combined.txt FD_samples_mean.txt
 
 fixel2tsf FC.mif tracks_filtered_template_subjectspace_refined.tck FC_samples.tsf
 tsfinfo FC_samples.tsf -ascii_combined FC_samples_combined.txt
+# Python script available in SBA/aux_files/
 python mean_fixelsamples.py FC_samples_combined.txt FC_samples_mean.txt
+
+# compute the sFDC metric
+paste -d '*' FC_samples_mean FD_samples_mean.txt | bc > sFDC.txt
 ```
