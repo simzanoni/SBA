@@ -17,12 +17,27 @@ tckgen FOD_template.mif.gz tracks_raw_template.tck -angle 22.5 -power 1.0 -selec
 tcksift tracks_raw_template.tck FOD_template.mif.gz tracks_filtered_template.tck 
 ```
 - **Further filtering**: at this stage the user may decide to implement further filtering according to criteria of choice (e.g. required WM intersection in each subject space)
+-  **SIFT2 multipliers computation**:
+```bash
+tcksift2 tracks_filtered_template.tck FOD_template.mif.gz tracks_filtered_template_sift2.txt
+```
 
 ## 3. Template tractogram refinement
 To minimise erroneous streamline sampling in subject space, SBA offers a back-tracking/re-tracking tool for tractograms warped to subject space. Please, refer to available community forum [resources](https://community.mrtrix.org/t/registration-using-transformations-generated-from-other-packages/2259) regarding tractograms registration.
 ```bash
 tckbacktrack tracks_filtered_template_subjectspace.tck FOD_subject.mif.gz 5tt_subjectspace.mif.gz tracks_filtered_template_subjectspace_refined.tck 
 ```
+
+<p align="center">
+  <img src="figures/tracks_refinement_methods_github.jpg" width="70%">
+</p>
+
+<p align="center">
+  <em>
+    Overview of the back-tracking/re-tracking process for one exemplar template streamline projected to subject space. In the middle, the streamline is overlaid on a tissue type segmentation image (Cerebro Spinal Fluid – CSF, cortical Gray Matter – cGM, subcortical Gray Matter – sGM, White Matter – WM). Tissue profiles are shown for both the raw subject space projected (left) and back-tracked/re-tracked (right) versions of the streamline.
+  </em>
+</p>
+
 <p align="center">
   <img src="figures/tracks_refinement_github.jpg" width="70%">
 </p>
@@ -33,4 +48,14 @@ tckbacktrack tracks_filtered_template_subjectspace.tck FOD_subject.mif.gz 5tt_su
   </em>
 </p>
 
+## 4. Streamline-wise metric computation
+SBA can flexibly accommodate various metrics, depending on the research question of interest. The only requirement is that one value per streamline is achieved. In the [Preprint/Paper] the along-streamline Fibre Density and bundle Cross section is used (sFDC). Please refer to steps 11-17 in the Fixel-Based Analysis [tutorial](https://mrtrix.readthedocs.io/en/dev/fixel_based_analysis/mt_fibre_density_cross-section.html).
+```bash
+fixel2tsf FD.mif tracks_filtered_template_subjectspace_refined.tck FD_samples.tsf
+tsfinfo FD_samples.tsf -ascii_combined FD_samples_combined.txt
+python mean_fixelsamples.py FD_samples_combined.txt FD_samples_mean.txt
 
+fixel2tsf FC.mif tracks_filtered_template_subjectspace_refined.tck FC_samples.tsf
+tsfinfo FC_samples.tsf -ascii_combined FC_samples_combined.txt
+python mean_fixelsamples.py FC_samples_combined.txt FC_samples_mean.txt
+```
