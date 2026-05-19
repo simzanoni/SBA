@@ -84,5 +84,10 @@ mrgrid T1w_template.nii.gz regrid -voxel 3 - | tcksimilarity tracks_filtered_tem
 ## 6. Streamline data smoothing
 This step produces smoothed streamline-wise data values as optimised via ROC-based evaluation:
 ```bash
-tckfilter sFDC.txt sFDC_smoothed.txt similarity_matrix
+tckfilter sFDC.txt sFDC_smoothed.txt similarity_matrix -tck_weights_in tracks_filtered_template_sift2.txt
+```
+
+## 7. Streamline-wise statistical inference with Similarity-informed Streamline Enhancement (SSE)
+```bash
+tckssestats in_streamline_directory subjects.txt design.txt similarity_matrix tracks_filtered_template_sift2.txt stats_results -nonstationarity_intrinsic -ttest contrast.txt
 ```
