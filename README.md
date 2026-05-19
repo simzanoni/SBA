@@ -1,6 +1,16 @@
 # Streamline-Based Analysis User Guide
 This document provides a user guide to conduct Streamline-Based Analysis (SBA) as presented in [Preprint/Paper].
 
+<p align="center">
+  <img src="figures/sba_pipeline_github.jpg" width="70%">
+</p>
+
+<p align="center">
+  <em>
+    Overview of the SBA pipeline. Multimodal MRI data are used to construct a study-specific tissue-unbiased template tractogram (which is first filtered and subsequently refined for each subject, while retaining streamline-to-streamline correspondence); this defines a tractogram-based coordinate system for streamline-wise analysis. Imaging measures are sampled and aggregated into streamline-wise metrics. Streamline similarity is used to enable both streamline-wise data smoothing and statistical enhancement within a permutation-based inference framework.
+  </em>
+</p>
+
 ## 1. Pre-processing
 The desirable pre-processing steps will vary depending on the specific dataset. Please, refer to external resources, such as this [tutorial](https://andysbrainbook.readthedocs.io/en/latest/MRtrix/MRtrix_Course/MRtrix_04_Preprocessing.html) or this [tutorial](https://mrtrix.readthedocs.io/en/dev/fixel_based_analysis/mt_fibre_density_cross-section.html) up to step 8.
 
@@ -63,4 +73,16 @@ python mean_fixelsamples.py FC_samples_combined.txt FC_samples_mean.txt
 
 # compute the sFDC metric
 paste -d '*' FC_samples_mean FD_samples_mean.txt | bc > sFDC.txt
+```
+
+## 5. Streamline-streamline similarity computation
+This step produces a streamline-streamline similarty matrix that is necessary for downstream processing steps. This command employs piping to provide a template grid that is 3mm isotropic based on the T1-weighted template image (it can be another one, as only the dimensions of the volume are used rather than voxel values).
+```bash
+mrgrid T1w_template.nii.gz regrid -voxel 3 - | tcksimilarity tracks_filtered_template.tck - similarity_matrix
+```
+
+## 6. Streamline data smoothing
+This step produces smoothed streamline-wise data values as optimised via ROC-based evaluation:
+```bash
+tckfilter sFDC.txt sFDC_smoothed.txt similarity_matrix
 ```
