@@ -1,6 +1,6 @@
 # Streamline-Based Analysis User Guide
 
-Please, use the relevant [code][https://github.com/simzanoni/mrtrix3.git] when running this pipeline.
+Please, use the relevant [code](https://github.com/simzanoni/mrtrix3.git) when running this pipeline.
 
 This document provides a user guide to conduct Streamline-Based Analysis (SBA) as presented in [Preprint/Paper].
 
