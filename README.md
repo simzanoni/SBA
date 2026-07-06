@@ -62,7 +62,7 @@ tckbacktrack tracks_filtered_template_subjectspace.tck FOD_subject.mif.gz 5tt_su
 </p>
 
 ## 4. Streamline-wise metric computation
-SBA can flexibly accommodate various metrics, depending on the research question of interest. The only requirement is that one value per streamline is achieved. In the [Preprint/Paper] the along-streamline Fibre Density and bundle Cross section is used (sFDC). Please refer to steps 11-17 in the Fixel-Based Analysis [tutorial](https://mrtrix.readthedocs.io/en/dev/fixel_based_analysis/mt_fibre_density_cross-section.html).
+SBA can flexibly accommodate various metrics, depending on the research question of interest. The only requirement is that one value per streamline is achieved. In the [Preprint](https://doi.org/10.21203/rs.3.rs-10123464/v1) the along-streamline Fibre Density and bundle Cross section is used (sFDC). Please refer to steps 11-17 in the Fixel-Based Analysis [tutorial](https://mrtrix.readthedocs.io/en/dev/fixel_based_analysis/mt_fibre_density_cross-section.html).
 ```bash
 fixel2tsf FD.mif tracks_filtered_template_subjectspace_refined.tck FD_samples.tsf
 tsfinfo FD_samples.tsf -ascii_combined FD_samples_combined.txt
