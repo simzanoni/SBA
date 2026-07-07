@@ -94,3 +94,30 @@ tckfilter sFDC.txt sFDC_smoothed.txt similarity_matrix -tck_weights_in tracks_fi
 ```bash
 tckssestats in_streamline_directory subjects.txt design.txt similarity_matrix tracks_filtered_template_sift2.txt stats_results -nonstationarity_intrinsic -ttest contrast.txt
 ```
+
+## 8. Display results
+These commands allow to display the results like in Figure 4 of the [Preprint](https://doi.org/10.21203/rs.3.rs-10123464/v1).
+An auxiliary NaN volume is generated to allow having a main image that is not visible.
+```bash
+mrcalc T1w_template.nii.gz NaN -mult nan.mif.gz
+```
+A binary mask is also needed to then obtain a glass brain. There are different tools that could be used to accurately segment a whole brain mask. In this case, [SynthStrip](https://surfer.nmr.mgh.harvard.edu/docs/synthstrip/) was used:
+```bash
+mri_synthstrip -i T1w_template.nii.gz -o stripped.nii.gz -m mask.nii.gz --no-csf
+```
+The glass brain is then generated:
+```bash
+mask2glass mask.nii.gz glass.mif.gz
+```
+Finally:
+```bash
+mrview nan.mif.gz -overlay.load glass.mif.gz -overlay.opacity 0.035 \
+    -interpolation 0 \
+    -noannotations \
+    -mode 3 \
+    -tractography.load tracks_filtered_template.tck \
+    -tractography.tsf_load stats_results/std_effect.txt \
+    -tractography.geometry lines \
+    -quiet \
+```
+Please, note that thresholding should be applied in mrview/Tractography using the separate stats_results/fwe_1mpvalue.txt scalar file according to the predefined significance threshold (e.g. [0.95, 1], equivalent to *p*-value<0.05).
